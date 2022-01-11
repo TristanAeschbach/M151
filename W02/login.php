@@ -1,5 +1,7 @@
 <?php
 
+include('dbconnector.inc.php');
+
 $error = '';
 $message = '';
 
@@ -31,19 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($error)){
 	
 	// kein fehler
 	if(empty($error)){
-      $host     = 'localhost';       // host
-      $username = 'tester';            // username
-      $password = '1234';        // Passwort (brauchen Sie nie dieses Passwort)
-      $database = 'm151';   // database
 
-      $conn = mysqli_connect($host, $username, $password, $database);
-
-      if (!$conn) {
-          die("Verbindung misslungen: " . mysqli_connect_error());
-      }
-      echo "Verbindung erfolgreich";
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+      $username = $_POST['username'];
+      $password = $_POST['password'];
 
       $stmt = $conn->prepare("SELECT username, password from users where username = ?;");
       $stmt->bind_param("s", $username);
@@ -53,10 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($error)){
       $result = $stmt->get_result();
 
       $row = $result->fetch_assoc();
-      if($row['password'] != $password || empty($row['username'])){
-          $error .= "Benutzername oder Passwort sind falsch";
-      }else{
+      if(password_verify($password, $row['password']) && !empty($row['username'])){
           $message .= "Sie sind nun eingeloggt";
+      }else{
+          $error .= "Benutzername oder Passwort sind falsch";
       }
 
 

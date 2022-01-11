@@ -1,7 +1,7 @@
 <?php
 $host     = 'localhost';       // host
-$username = 'tester';            // username
-$password = '1234';        // Passwort (brauchen Sie nie dieses Passwort)
+$username = 'readwrite';            // username
+$password = '123456';        // Passwort (brauchen Sie nie dieses Passwort)
 $database = 'm151';   // database
 
 // Verbindung herstellen

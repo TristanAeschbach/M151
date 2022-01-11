@@ -1,5 +1,6 @@
 <?php
 
+include('dbconnector.inc.php');
 
 // Initialisierung
 $error = $message =  '';
@@ -65,19 +66,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
   // wenn kein Fehler vorhanden ist, schreiben der Daten in die Datenbank
   if(empty($error)){
-      // Vorbereiten und binden
-      $host     = 'localhost';       // host
-      $username = 'tester';            // username
-      $password = '1234';        // Passwort (brauchen Sie nie dieses Passwort)
-      $database = 'm151';   // database
-
-      $conn = mysqli_connect($host, $username, $password, $database);
-
-      if (!$conn) {
-          die("Verbindung misslungen: " . mysqli_connect_error());
-      }
-      echo "Verbindung erfolgreich";
-
 
       $stmt = $conn->prepare("INSERT INTO users (firstname, lastname, username, password, email) VALUES (?, ?, ?, ?, ?)");
       $stmt->bind_param("sssss", $firstname, $lastname, $username, $password, $email);
@@ -86,7 +74,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
       $lastname =$_POST['lastname'];
       $username =$_POST['username'];
       $email =$_POST['email'];
-      $password =$_POST['password'];
+      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
       $stmt->execute();
 
       echo"New Datenfelder erfolgreich geschrieben";
