@@ -46,20 +46,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($error)){
 
       $row = $result->fetch_assoc();
       if(password_verify($password, $row['password']) && !empty($row['username'])){
-          $message .= "Sie sind nun eingeloggt";
+          session_start();
+          $_SESSION['username'] = $username;
+          session_regenerate_id();
+          echo "<meta http-equiv='refresh' content='0;url=admin.php'>";
       }else{
           $error .= "Benutzername oder Passwort sind falsch";
       }
-
-
-        // TODO SELECT Query erstellen, user und passwort mit Datenbank vergleichen
-        // TODO prepare()
-		// TODO bind_param()
-		// TODO execute()
-		// TODO Passwort auslesen und mit dem eingegeben Passwort vergleichen
-		// TODO wenn Passwort korrekt:  $message .= "Sie sind nun eingeloggt"; 
-		// TODO wenn Passwort falsch, oder kein Benutzer mit diesem Benutzernamem in DB: $error .= "Benutzername oder Passwort sind falsch";
 	}
+
 }
 
 ?>
